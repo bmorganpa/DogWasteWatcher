@@ -1,20 +1,20 @@
 {
-  "name": "projectx",
+  "name": "DogWasteWatcher",
   "env": {
-    "PGUSER": "@sql-projectx-username",
-    "PGHOST": "@sql-projectx-hostname",
-    "PGPASSWORD": "@sql-projectx-password",
-    "PGDATABASE": "projectx_development",
+    "PGUSER": "@dogwastewatcher-sql-username",
+    "PGHOST": "@dogwastewatcher-sql-hostname",
+    "PGPASSWORD": "@dogwastewatcher-sql-password",
+    "PGDATABASE": "dogwastewatcher_production",
     "PGPORT": "5432"
   },
   "build": {
     "env": {
-      "AUTH0_DOMAIN": "bradprojectx.auth0.com",
-      "AUTH0_CLIENT_ID": "iiF6eET1cgpYoMuIsyRhwcIWWnroZtAx",
-      "AUTH0_CLIENT_SECRET": "@auth0_client_secret",
-      "REDIRECT_URI": "https://projectx-git-feature-auth-0.bmorganpa.now.sh/api/callback",
-      "POST_LOGOUT_REDIRECT_URI": "https://projectx-git-feature-auth-0.bmorganpa.now.sh/",
-      "SESSION_COOKIE_SECRET": "@session_cookie_secret"
+      "AUTH0_DOMAIN": "dogwastewatcher.auth0.com",
+      "AUTH0_CLIENT_ID": "7QsIwNpceIGlyCo3Ukm9nQE9E2nayRJM",
+      "AUTH0_CLIENT_SECRET": "@dogwastewatcher-auth0-client-secret",
+      "REDIRECT_URI": "https://dogwastewatcher.now.sh/api/callback",
+      "POST_LOGOUT_REDIRECT_URI": "https://dogwastewatcher.now.sh/",
+      "SESSION_COOKIE_SECRET": "@dogwastewatcher-session-cookie-secret"
     }
   }
 }
