@@ -1,0 +1,11 @@
+{
+  "title": "Hello {{name}}",
+  "buttons": {
+    "create": {
+      "label": "Create Thing"
+    }
+  },
+  "labels": {
+    "thing": "ID: {{id}} Lat: {{latitude}} Lng {{longitude}}"
+  }
+}
