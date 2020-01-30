@@ -12,6 +12,20 @@ import { WASTES_QUERY } from "./index";
 import { AddWasteMutation, WastesListQuery } from "../__generated__/types";
 import { AddWasteMutationVariables } from "../__generated__/types";
 
+interface UsePositionPayload {
+  position?: Position;
+  error?: PositionError;
+}
+
+function usePosition(): UsePositionPayload {
+  const [ position, setPosition ] = React.useState<Position>()
+  const [ error, setError ] = React.useState<PositionError>()
+  React.useEffect(() => {
+    navigator.geolocation.getCurrentPosition(setPosition, setError);
+  }, [])
+  return {position, error }
+}
+
 const CREATE_WASTE_MUTATION = gql`
   mutation AddWasteMutation($input: CreateWasteInput!) {
     createWaste(input: $input) {
@@ -55,14 +69,22 @@ const Index = () => {
     addWaste({
       variables: {
         input: {
-          waste: { lat: parseInt(latitude, 10), lng: parseInt(longitude, 10) },
+          waste: { latitude: parseInt(latitude, 10), longitude: parseInt(longitude, 10) },
         },
       },
     });
   };
 
-  const [latitude, setLatitude] = useState("0");
-  const [longitude, setLongitude] = useState("0");
+  const { position } = usePosition();
+  const [latitude, setLatitude] = useState(position?.coords.latitude.toString() ?? "0");
+  const [longitude, setLongitude] = useState(position?.coords.longitude.toString() ?? "0");
+
+  React.useEffect(() => {
+    if (position) {
+      setLatitude(position.coords.latitude.toString())
+      setLongitude(position.coords.longitude.toString())
+    }
+  }, [position])
 
   const handleLatitudeChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
