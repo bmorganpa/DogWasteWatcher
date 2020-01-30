@@ -4,11 +4,11 @@ set -e
 
 echo "Creating databases"
 "${psql[@]}" <<-EOSQL
-  CREATE DATABASE projectx_development;
-  CREATE DATABASE projectx_test;
+  CREATE DATABASE dogwastewatcher_development;
+  CREATE DATABASE dogwastewatcher_test;
 EOSQL
 
-for DB in projectx_development projectx_test; do
+for DB in dogwastewatcher_test; do
 echo "Loading PostGIS extensions into $DB"
 "${psql[@]}" --dbname="$DB" <<-EOSQL
   CREATE EXTENSION IF NOT EXISTS postgis;
