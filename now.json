@@ -1,5 +1,8 @@
 {
   "name": "DogWasteWatcher",
+  "builds": [
+    {"src": "nextapp/package.json", "use": "@now/next"}
+  ],
   "env": {
     "PGUSER": "@dogwastewatcher-sql-username",
     "PGHOST": "@dogwastewatcher-sql-hostname",
@@ -16,5 +19,8 @@
       "POST_LOGOUT_REDIRECT_URI": "https://dogwastewatcher.now.sh/",
       "SESSION_COOKIE_SECRET": "@dogwastewatcher-session-cookie-secret"
     }
-  }
+  },
+  "routes": [
+    { "src": "/(.*)", "dest": "nextapp/$1"}
+  ]
 }
