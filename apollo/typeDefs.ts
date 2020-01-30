@@ -1,30 +1,30 @@
 import gql from "graphql-tag";
 
 export const typeDefs = gql`
-  type Thing {
+  type Waste {
     id: ID!
     latitude: Float!
     longitude: Float!
   }
 
-  input ThingInput {
+  input WasteInput {
     latitude: Float
     longitude: Float
   }
 
-  input CreateThingInput {
-    thing: ThingInput!
+  input CreateWasteInput {
+    waste: WasteInput!
   }
 
-  type CreateThingPayload {
-    thing: Thing
+  type CreateWastePayload {
+    waste: Waste
   }
 
   type Query {
-    things: [Thing!]!
+    wastes: [Waste!]!
   }
 
   type Mutation {
-    createThing(input: CreateThingInput!): CreateThingPayload
+    createWaste(input: CreateWasteInput!): CreateWastePayload
   }
 `;

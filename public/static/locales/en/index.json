@@ -2,10 +2,10 @@
   "title": "Hello {{name}}",
   "buttons": {
     "create": {
-      "label": "Create Thing"
+      "label": "Create Waste"
     }
   },
   "labels": {
-    "thing": "ID: {{id}} Lat: {{latitude}} Lng {{longitude}}"
+    "waste": "ID: {{id}} Lat: {{latitude}} Lng {{longitude}}"
   }
 }

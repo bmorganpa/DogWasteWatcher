@@ -4,13 +4,13 @@ import Link from "next/link";
 import { useQuery } from "@apollo/react-hooks";
 import { useTranslation } from "react-i18next";
 
-import { ThingsListQuery } from "../__generated__/types";
-import { ThingsListQuery_things } from "../__generated__/types";
+import { WastesListQuery } from "../__generated__/types";
+import { WastesListQuery_wastes } from "../__generated__/types";
 import { withApollo } from "../apollo/client";
 
-export const THINGS_QUERY = gql`
-  query ThingsListQuery {
-    things {
+export const WASTES_QUERY = gql`
+  query WastesListQuery {
+    wastes {
       id
       latitude
       longitude
@@ -20,8 +20,8 @@ export const THINGS_QUERY = gql`
 
 const Index = () => {
   const { t } = useTranslation("index");
-  const { data: thingsListData, error, loading } = useQuery<ThingsListQuery>(
-    THINGS_QUERY,
+  const { data: wastesListData, error, loading } = useQuery<WastesListQuery>(
+    WASTES_QUERY,
   );
 
   const [user, setUser] = React.useState();
@@ -39,12 +39,12 @@ const Index = () => {
     return <div>Loading...</div>;
   }
 
-  const thingsList = thingsListData?.things ? (
+  const wastesList = wastesListData?.wastes ? (
     <ul>
-      {thingsListData?.things.map(function mapThingToComponent(
-        thing: ThingsListQuery_things,
+      {wastesListData?.wastes.map(function mapWasteToComponent(
+        waste: WastesListQuery_wastes,
       ) {
-        return <li key={thing.id}>{t("labels.thing", thing as any)}</li>;
+        return <li key={waste.id}>{t("labels.waste", waste as any)}</li>;
       })}
     </ul>
   ) : (
@@ -61,11 +61,11 @@ const Index = () => {
       )}
       <div>{user && <a href="/api/logout">{t("common:labels.logout")}</a>}</div>
       <div>
-        <Link href="/create_thing">
+        <Link href="/create_waste">
           <a>{t("buttons.create.label")}</a>
         </Link>
       </div>
-      {thingsList}
+      {wastesList}
     </div>
   );
 };

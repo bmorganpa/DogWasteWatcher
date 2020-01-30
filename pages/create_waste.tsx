@@ -8,14 +8,14 @@ import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
 
 import { withApollo } from "../apollo/client";
-import { THINGS_QUERY } from "./index";
-import { AddThingMutation, ThingsListQuery } from "../__generated__/types";
-import { AddThingMutationVariables } from "../__generated__/types";
+import { WASTES_QUERY } from "./index";
+import { AddWasteMutation, WastesListQuery } from "../__generated__/types";
+import { AddWasteMutationVariables } from "../__generated__/types";
 
-const CREATE_THING_MUTATION = gql`
-  mutation AddThingMutation($input: CreateThingInput!) {
-    createThing(input: $input) {
-      thing {
+const CREATE_WASTE_MUTATION = gql`
+  mutation AddWasteMutation($input: CreateWasteInput!) {
+    createWaste(input: $input) {
+      waste {
         id
         latitude
         longitude
@@ -25,20 +25,20 @@ const CREATE_THING_MUTATION = gql`
 `;
 
 const Index = () => {
-  const { t } = useTranslation("create_thing");
+  const { t } = useTranslation("create_waste");
   const router = useRouter();
-  const [addThing] = useMutation<AddThingMutation, AddThingMutationVariables>(
-    CREATE_THING_MUTATION,
+  const [addWaste] = useMutation<AddWasteMutation, AddWasteMutationVariables>(
+    CREATE_WASTE_MUTATION,
     {
       update(cache, { data }) {
-        const thingsQuery = cache.readQuery<ThingsListQuery>({
-          query: THINGS_QUERY,
+        const wastesQuery = cache.readQuery<WastesListQuery>({
+          query: WASTES_QUERY,
         });
-        if (thingsQuery && data?.createThing?.thing) {
+        if (wastesQuery && data?.createWaste?.waste) {
           cache.writeQuery({
-            query: THINGS_QUERY,
+            query: WASTES_QUERY,
             data: {
-              things: thingsQuery.things.concat([data.createThing.thing]),
+              wastes: wastesQuery.wastes.concat([data.createWaste.waste]),
             },
           });
         }
@@ -52,10 +52,10 @@ const Index = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    addThing({
+    addWaste({
       variables: {
         input: {
-          thing: { lat: parseInt(latitude, 10), lng: parseInt(longitude, 10) },
+          waste: { lat: parseInt(latitude, 10), lng: parseInt(longitude, 10) },
         },
       },
     });

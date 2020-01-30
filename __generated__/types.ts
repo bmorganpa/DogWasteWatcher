@@ -3,27 +3,27 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: AddThingMutation
+// GraphQL mutation operation: AddWasteMutation
 // ====================================================
 
-export interface AddThingMutation_createThing_thing {
-  __typename: "Thing";
+export interface AddWasteMutation_createWaste_waste {
+  __typename: "Waste";
   id: string;
-  lat: number;
-  lng: number;
+  latitude: number;
+  longitude: number;
 }
 
-export interface AddThingMutation_createThing {
-  __typename: "CreateThingPayload";
-  thing: AddThingMutation_createThing_thing | null;
+export interface AddWasteMutation_createWaste {
+  __typename: "CreateWastePayload";
+  waste: AddWasteMutation_createWaste_waste | null;
 }
 
-export interface AddThingMutation {
-  createThing: AddThingMutation_createThing | null;
+export interface AddWasteMutation {
+  createWaste: AddWasteMutation_createWaste | null;
 }
 
-export interface AddThingMutationVariables {
-  input: CreateThingInput;
+export interface AddWasteMutationVariables {
+  input: CreateWasteInput;
 }
 
 /* tslint:disable */
@@ -31,18 +31,18 @@ export interface AddThingMutationVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: ThingsListQuery
+// GraphQL query operation: WastesListQuery
 // ====================================================
 
-export interface ThingsListQuery_things {
-  __typename: "Thing";
+export interface WastesListQuery_wastes {
+  __typename: "Waste";
   id: string;
-  lat: number;
-  lng: number;
+  latitude: number;
+  longitude: number;
 }
 
-export interface ThingsListQuery {
-  things: ThingsListQuery_things[];
+export interface WastesListQuery {
+  wastes: WastesListQuery_wastes[];
 }
 
 /* tslint:disable */
@@ -53,13 +53,13 @@ export interface ThingsListQuery {
 // START Enums and Input Objects
 //==============================================================
 
-export interface CreateThingInput {
-  thing: ThingInput;
+export interface CreateWasteInput {
+  waste: WasteInput;
 }
 
-export interface ThingInput {
-  lat?: number | null;
-  lng?: number | null;
+export interface WasteInput {
+  latitude?: number | null;
+  longitude?: number | null;
 }
 
 //==============================================================

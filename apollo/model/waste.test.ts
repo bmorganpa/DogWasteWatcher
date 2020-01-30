@@ -1,14 +1,14 @@
-import { createThing_ThingRowFactory } from "./thing.fixture";
+import { createWaste_WasteRowFactory } from "./waste.fixture";
 
-import { parseThingRow } from "./thing";
+import { parseWasteRow } from "./waste";
 
-describe("parseThingRow", () => {
+describe("parseWasteRow", () => {
   it("should parse a row", () => {
-    const row = createThing_ThingRowFactory({
+    const row = createWaste_WasteRowFactory({
       id: 1,
       location_ewkt: "SRID=4326;POINT(21 12)",
     });
-    const actual = parseThingRow(row);
+    const actual = parseWasteRow(row);
     const expected = {
       id: 1,
       latitude: 12,

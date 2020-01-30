@@ -2,13 +2,13 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
 import common from "./public/static/locales/en/common.json";
-import create_thing from "./public/static/locales/en/create_thing.json";
+import create_waste from "./public/static/locales/en/create_waste.json";
 import index from "./public/static/locales/en/index.json";
 
 const resources = {
   en: {
     common,
-    create_thing,
+    create_waste,
     index,
   },
 };

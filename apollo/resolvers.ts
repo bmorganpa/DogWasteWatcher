@@ -1,30 +1,29 @@
 import { AppContext } from "./context";
-import { Thing, CreateThingInput, CreateThingPayload } from "./model/thing";
-import { createThing } from "./model/thing";
-import { getThings } from "./model/thing";
+import { Waste, CreateWasteInput, CreateWastePayload } from "./model/waste";
+import { createWaste, getWastes } from "./model/waste";
 
 export const resolvers = {
   Query: {
-    things(
+    wastes(
       parent: unknown,
       args: unknown,
       { db, user }: AppContext,
-    ): Promise<ReadonlyArray<Thing>> {
+    ): Promise<ReadonlyArray<Waste>> {
       if (!user) {
         throw new Error("Not Authed");
       }
-      return getThings(db);
+      return getWastes(db);
     },
   },
   Mutation: {
-    createThing: async (
+    createWaste: async (
       parent: unknown,
-      { input: { thing } }: { input: CreateThingInput },
+      { input: { waste } }: { input: CreateWasteInput },
       { db }: AppContext,
-    ): Promise<CreateThingPayload> => {
-      const output = await createThing(db, thing);
+    ): Promise<CreateWastePayload> => {
+      const output = await createWaste(db, waste);
       return {
-        thing: output,
+        waste: output,
       };
     },
   },
