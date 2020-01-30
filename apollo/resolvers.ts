@@ -9,9 +9,6 @@ export const resolvers = {
       args: unknown,
       { db, user }: AppContext,
     ): Promise<ReadonlyArray<Waste>> {
-      if (!user) {
-        throw new Error("Not Authed");
-      }
       return getWastes(db);
     },
   },
