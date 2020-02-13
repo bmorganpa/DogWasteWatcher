@@ -24,7 +24,7 @@ PGPORT=55432
 ```
 
 1. `docker build -t dogwastewatcher_db ./db`
-1. `docker run --rm -it -p 55432:5432 dogwastewatcher_db`
+1. `docker run --rm -it -v /srv/dogwastewatcher/db:/var/lib/postgresql/data -p 55432:5432 dogwastewatcher_db`
 
 Connect to the db with `PGPASSWORD=password psql -h localhost -U postgres -p 55432 -d dogwastewatcher_development`
 
@@ -37,4 +37,4 @@ FLYWAY_PASSWORD=db_password
 ```
 
 1. Create new sql file under "migrations" directory
-1. `docker run --rm --env-file <env_filename> -v ${PWD}/migrations:/flyway/sql flyway/flyway:6.2.0 migrate`
+1. `docker run --rm --env-file <env_filename> --network="host" -v ${PWD}/migrations:/flyway/sql flyway/flyway:6.2.0 migrate`
