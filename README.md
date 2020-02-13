@@ -2,6 +2,12 @@
 An app to track dog waste that is not picked up
 
 ## Development
+First add the following to a `.env.build' file:
+```
+AUTH0_CLIENT_SECRET=<INSERT_AUTH0_CLIENT_SECRET>
+SESSION_COOKIE_SECRET=<INSERT_SESSION_COOKIE>
+```
+
 1. `now`
 1. `now dev`
 
