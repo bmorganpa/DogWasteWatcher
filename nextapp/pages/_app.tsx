@@ -3,12 +3,12 @@ import { AppProps } from "next/app";
 import "../i18n";
 
 export type UserState = Readonly<{
-    loading: boolean;
-    user?: any;
+  loading: boolean;
+  user?: any;
 }>;
 
 const UserContext = React.createContext<UserState>({
-    loading: true
+  loading: true,
 });
 
 export default function MyApp(props: AppProps) {
@@ -38,5 +38,5 @@ function useFetchUser() {
     }
     getUser();
   }, [setUser]);
-  return {loading, user};
+  return { loading, user };
 }

@@ -26,7 +26,7 @@ const Index = () => {
     WASTES_QUERY,
   );
 
-  const {loading: userLoading, user} = useUser();
+  const { loading: userLoading, user } = useUser();
 
   if (loading || userLoading) {
     return <div>Loading...</div>;
@@ -40,9 +40,7 @@ const Index = () => {
         return <li key={waste.id}>{t("labels.waste", waste as any)}</li>;
       })}
     </ul>
-  ) : (
-    undefined
-  );
+  ) : undefined;
 
   return (
     <div>
@@ -52,7 +50,11 @@ const Index = () => {
       ) : (
         <a href="/api/login">{t("common:labels.login")}</a>
       )}
-      {user && <div><a href="/api/logout">{t("common:labels.logout")}</a></div>}
+      {user && (
+        <div>
+          <a href="/api/logout">{t("common:labels.logout")}</a>
+        </div>
+      )}
       <div>
         <Link href="/create_waste">
           <a>{t("buttons.create.label")}</a>
