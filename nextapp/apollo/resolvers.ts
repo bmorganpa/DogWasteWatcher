@@ -7,7 +7,7 @@ export const resolvers = {
     wastes(
       parent: unknown,
       args: unknown,
-      { db, user }: AppContext,
+      { db }: AppContext,
     ): Promise<ReadonlyArray<Waste>> {
       return getWastes(db);
     },
@@ -16,9 +16,9 @@ export const resolvers = {
     createWaste: async (
       parent: unknown,
       { input: { waste } }: { input: CreateWasteInput },
-      { db }: AppContext,
+      { db, user }: AppContext,
     ): Promise<CreateWastePayload> => {
-      const output = await createWaste(db, waste);
+      const output = await createWaste(db, user)(waste);
       return {
         waste: output,
       };
