@@ -16,9 +16,9 @@ export const resolvers = {
     createWaste: async (
       parent: unknown,
       { input: { waste } }: { input: CreateWasteInput },
-      { db }: AppContext,
+      { db, user }: AppContext,
     ): Promise<CreateWastePayload> => {
-      const output = await createWaste(db, waste);
+      const output = await createWaste(db, user)(waste);
       return {
         waste: output,
       };

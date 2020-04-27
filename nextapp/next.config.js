@@ -16,6 +16,8 @@ module.exports = {
     config.externals = config.externals || {};
     // This allows us to import "pg" for SSR, but ignore it on the client
     config.externals.pg = "pg";
+    // This allows us to import "apollo-server-micro" for SSR, but ignore it on the client
+    config.externals['apollo-server-micro'] = "apollo-server-micro";
     return config;
   },
   exportPathMap: function() {
