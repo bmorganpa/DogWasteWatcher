@@ -2,6 +2,8 @@ import { Geometry, Point } from "wkx";
 import { Client } from "pg";
 
 import { AuthenticationError } from "./error";
+import { AuthorizationError } from "./error";
+import { Claims } from "./index";
 import { User } from "./index";
 
 export interface Waste {
@@ -31,10 +33,13 @@ export async function getWastes(pg: Client): Promise<ReadonlyArray<Waste>> {
   return result.rows.map(parseWasteRow);
 }
 
-export function createWaste(pg: Client, user?: User) {
+export function createWaste(pg: Client, user?: User, claims?: Claims) {
   return async (waste: WasteInput): Promise<Waste> => {
     if (!user) {
       throw new AuthenticationError();
+    }
+    if (!hasPermission("waste:write")(claims)) {
+      throw new AuthorizationError("waste:write");
     }
     const result = await pg.query<createWaste_WasteRow, string[]>(
       "INSERT INTO wastes(location) VALUES($1) RETURNING id, ST_AsEWKT(location) as location_ewkt",
@@ -63,3 +68,9 @@ export type createWaste_WasteRow = Readonly<{
   id: number;
   location_ewkt: string;
 }>;
+
+function hasPermission(permission: string) {
+  return (claims?: Claims): boolean => {
+    return claims?.permissions.includes(permission) ?? false;
+  }
+}
