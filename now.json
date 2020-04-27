@@ -1,5 +1,4 @@
 {
-  "name": "DogWasteWatcher",
   "builds": [
     {"src": "nextapp/package.json", "use": "@now/next"}
   ],
