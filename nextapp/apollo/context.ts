@@ -1,6 +1,7 @@
 import { IncomingMessage } from "http";
-import { User } from "./model/index";
 
+import { Claims } from "./model/index";
+import { User } from "./model/index";
 import { auth0 } from "../lib/auth0";
 
 type IncomingContext = Readonly<{
@@ -8,6 +9,7 @@ type IncomingContext = Readonly<{
 }>;
 
 export type AppContext = Readonly<{
+  claims: Claims;
   db: any;
   user?: User;
 }>;
@@ -19,5 +21,7 @@ export const createContext = async ({
   const db = new Pool();
 
   const session = await auth0.getSession(req);
-  return { db, user: session?.user };
+  const user = session?.user;
+  const claims = user?.["https://dogwastewatcher.now.sh/claims"];
+  return { db, user, claims };
 };
