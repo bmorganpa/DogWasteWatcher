@@ -1,6 +1,8 @@
 import Button from "@material-ui/core/Button";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
 import React, { useState, useCallback } from "react";
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
@@ -18,12 +20,12 @@ interface UsePositionPayload {
 }
 
 function usePosition(): UsePositionPayload {
-  const [ position, setPosition ] = React.useState<Position>()
-  const [ error, setError ] = React.useState<PositionError>()
+  const [position, setPosition] = React.useState<Position>();
+  const [error, setError] = React.useState<PositionError>();
   React.useEffect(() => {
     navigator.geolocation.getCurrentPosition(setPosition, setError);
-  }, [])
-  return {position, error }
+  }, []);
+  return { position, error };
 }
 
 const CREATE_WASTE_MUTATION = gql`
@@ -41,27 +43,27 @@ const CREATE_WASTE_MUTATION = gql`
 const Index = () => {
   const { t } = useTranslation("create_waste");
   const router = useRouter();
-  const [addWaste] = useMutation<AddWasteMutation, AddWasteMutationVariables>(
-    CREATE_WASTE_MUTATION,
-    {
-      update(cache, { data }) {
-        const wastesQuery = cache.readQuery<WastesListQuery>({
+  const [addWaste, { loading, error }] = useMutation<
+    AddWasteMutation,
+    AddWasteMutationVariables
+  >(CREATE_WASTE_MUTATION, {
+    update(cache, { data }) {
+      const wastesQuery = cache.readQuery<WastesListQuery>({
+        query: WASTES_QUERY,
+      });
+      if (wastesQuery && data?.createWaste?.waste) {
+        cache.writeQuery({
           query: WASTES_QUERY,
+          data: {
+            wastes: wastesQuery.wastes.concat([data.createWaste.waste]),
+          },
         });
-        if (wastesQuery && data?.createWaste?.waste) {
-          cache.writeQuery({
-            query: WASTES_QUERY,
-            data: {
-              wastes: wastesQuery.wastes.concat([data.createWaste.waste]),
-            },
-          });
-        }
-      },
-      onCompleted: () => {
-        router.push("/");
-      },
+      }
     },
-  );
+    onCompleted: () => {
+      router.push("/");
+    },
+  });
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -69,22 +71,29 @@ const Index = () => {
     addWaste({
       variables: {
         input: {
-          waste: { latitude: parseInt(latitude, 10), longitude: parseInt(longitude, 10) },
+          waste: {
+            latitude: parseInt(latitude, 10),
+            longitude: parseInt(longitude, 10),
+          },
         },
       },
     });
   };
 
   const { position } = usePosition();
-  const [latitude, setLatitude] = useState(position?.coords.latitude.toString() ?? "0");
-  const [longitude, setLongitude] = useState(position?.coords.longitude.toString() ?? "0");
+  const [latitude, setLatitude] = useState(
+    position?.coords.latitude.toString() ?? "0",
+  );
+  const [longitude, setLongitude] = useState(
+    position?.coords.longitude.toString() ?? "0",
+  );
 
   React.useEffect(() => {
     if (position) {
-      setLatitude(position.coords.latitude.toString())
-      setLongitude(position.coords.longitude.toString())
+      setLatitude(position.coords.latitude.toString());
+      setLongitude(position.coords.longitude.toString());
     }
-  }, [position])
+  }, [position]);
 
   const handleLatitudeChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -103,6 +112,13 @@ const Index = () => {
   return (
     <form onSubmit={handleSubmit}>
       <Grid container={true}>
+        {error?.graphQLErrors.map((e) => {
+          return (
+            <Grid key={e.message} item={true} xs={12}>
+              <Typography color="error">{e.message}</Typography>
+            </Grid>
+          );
+        })}
         <Grid item={true} xs={12}>
           <TextField
             required
@@ -124,8 +140,14 @@ const Index = () => {
           />
         </Grid>
         <Grid item={true} xs={12}>
-          <Button color="secondary" variant="contained" type="submit">
+          <Button
+            color="secondary"
+            disabled={loading}
+            variant="contained"
+            type="submit"
+          >
             {t("common:labels.submit")}
+            {loading && <CircularProgress />}
           </Button>
         </Grid>
       </Grid>

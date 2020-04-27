@@ -8,6 +8,8 @@ import { WastesListQuery } from "../__generated__/types";
 import { WastesListQuery_wastes } from "../__generated__/types";
 import { withApollo } from "../apollo/client";
 
+import { useUser } from "./_app";
+
 export const WASTES_QUERY = gql`
   query WastesListQuery {
     wastes {
@@ -24,18 +26,9 @@ const Index = () => {
     WASTES_QUERY,
   );
 
-  const [user, setUser] = React.useState();
-  React.useEffect(() => {
-    async function getUser() {
-      const res = await fetch("/api/me");
-      if (res.ok) {
-        setUser(await res.json());
-      }
-    }
-    getUser();
-  }, [setUser]);
+  const {loading: userLoading, user} = useUser();
 
-  if (loading) {
+  if (loading || userLoading) {
     return <div>Loading...</div>;
   }
 
@@ -59,7 +52,7 @@ const Index = () => {
       ) : (
         <a href="/api/login">{t("common:labels.login")}</a>
       )}
-      <div>{user && <a href="/api/logout">{t("common:labels.logout")}</a>}</div>
+      {user && <div><a href="/api/logout">{t("common:labels.logout")}</a></div>}
       <div>
         <Link href="/create_waste">
           <a>{t("buttons.create.label")}</a>

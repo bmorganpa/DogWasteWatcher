@@ -1,6 +1,9 @@
 import { Geometry, Point } from "wkx";
 import { Client } from "pg";
 
+import { AuthenticationError } from "./error";
+import { User } from "./index";
+
 export interface Waste {
   id: number;
   latitude: number;
@@ -28,20 +31,22 @@ export async function getWastes(pg: Client): Promise<ReadonlyArray<Waste>> {
   return result.rows.map(parseWasteRow);
 }
 
-export async function createWaste(
-  pg: Client,
-  waste: WasteInput,
-): Promise<Waste> {
-  const result = await pg.query<createWaste_WasteRow, string[]>(
-    "INSERT INTO wastes(location) VALUES($1) RETURNING id, ST_AsEWKT(location) as location_ewkt",
-    [`SRID=4326;POINT(${waste.longitude} ${waste.latitude})`],
-  );
-  pg.end();
-  if (result.rowCount === 0) {
-    // TODO: Throw error?
-  }
+export function createWaste(pg: Client, user?: User) {
+  return async (waste: WasteInput): Promise<Waste> => {
+    if (!user) {
+      throw new AuthenticationError();
+    }
+    const result = await pg.query<createWaste_WasteRow, string[]>(
+      "INSERT INTO wastes(location) VALUES($1) RETURNING id, ST_AsEWKT(location) as location_ewkt",
+      [`SRID=4326;POINT(${waste.longitude} ${waste.latitude})`],
+    );
+    pg.end();
+    if (result.rowCount === 0) {
+      // TODO: Throw error?
+    }
 
-  return parseWasteRow(result.rows[0]);
+    return parseWasteRow(result.rows[0]);
+  };
 }
 
 export function parseWasteRow(row: createWaste_WasteRow): Waste {

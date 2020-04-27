@@ -1,5 +1,5 @@
 import { IncomingMessage } from "http";
-import { IClaims } from "@auth0/nextjs-auth0/dist/session/session";
+import { User } from "./model/index";
 
 import { auth0 } from "../lib/auth0";
 
@@ -9,7 +9,7 @@ type IncomingContext = Readonly<{
 
 export type AppContext = Readonly<{
   db: any;
-  user?: IClaims;
+  user?: User;
 }>;
 
 export const createContext = async ({
