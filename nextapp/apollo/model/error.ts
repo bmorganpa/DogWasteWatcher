@@ -13,3 +13,11 @@ export class AuthorizationError extends Error {
         Object.setPrototypeOf(this, AuthorizationError.prototype);
     }
 }
+
+export class BadRequestError extends Error {
+    constructor(public properties: Readonly<{[key: string]: any}>) {
+        super("Bad request");
+
+        Object.setPrototypeOf(this, BadRequestError.prototype);
+    }
+}

@@ -3,6 +3,7 @@ import { Client } from "pg";
 
 import { AuthenticationError } from "./error";
 import { AuthorizationError } from "./error";
+import { BadRequestError } from "./error";
 import { Claims } from "./index";
 import { User } from "./index";
 
@@ -41,17 +42,40 @@ export function createWaste(pg: Client, user?: User, claims?: Claims) {
     if (!hasPermission("waste:write")(claims)) {
       throw new AuthorizationError("waste:write");
     }
-    const result = await pg.query<createWaste_WasteRow, string[]>(
-      "INSERT INTO wastes(location) VALUES($1) RETURNING id, ST_AsEWKT(location) as location_ewkt",
-      [`SRID=4326;POINT(${waste.longitude} ${waste.latitude})`],
-    );
-    pg.end();
-    if (result.rowCount === 0) {
-      // TODO: Throw error?
-    }
+    const validatedInput = validateWasteInput(waste);
+    try {
+      const result = await pg.query<createWaste_WasteRow, string[]>(
+        "INSERT INTO wastes(location) VALUES(ST_SetSRID(ST_MakePoint($1, $2),4326)) RETURNING id, ST_AsEWKT(location) as location_ewkt",
+        [validatedInput.longitude.toString(), validatedInput.latitude.toString()],
+      );
+      pg.end();
+      if (result.rowCount === 0) {
+        throw new Error("createWaste failed");
+      }
 
-    return parseWasteRow(result.rows[0]);
+      return parseWasteRow(result.rows[0]);
+    } catch (error) {
+      console.error(error);
+      throw new Error("createWaste failed");
+    }
   };
+}
+
+export function validateWasteInput(wasteInput: WasteInput): Required<WasteInput> {
+  const properties: {[key: string]: any} = {};
+  const { longitude, latitude } = wasteInput;
+  if (longitude === undefined) {
+    properties.longitude = 'Required';
+  }
+  if (latitude === undefined) {
+    properties.latitude = 'Required';
+  }
+
+  if (Object.values(properties).length > 0) {
+    throw new BadRequestError(properties);
+  }
+
+  return wasteInput as any
 }
 
 export function parseWasteRow(row: createWaste_WasteRow): Waste {
@@ -72,5 +96,5 @@ export type createWaste_WasteRow = Readonly<{
 function hasPermission(permission: string) {
   return (claims?: Claims): boolean => {
     return claims?.permissions.includes(permission) ?? false;
-  }
+  };
 }

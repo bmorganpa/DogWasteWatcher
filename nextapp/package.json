@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev -p 8080",
     "build": "next build",
+    "pretty": "prettier --write **/*.ts[x]",
     "lint": "eslint **/*.ts[x]",
     "start": "next start",
     "export": "next export",
@@ -52,7 +53,7 @@
     "eslint-plugin-react": "^7.17.0",
     "eslint-plugin-react-hooks": "^1.7.0",
     "jest": "^24.9.0",
-    "ts-jest": "^25.4.0",
+    "prettier": "^2.0.5",
     "tsfixturefactory": "^1.0.0",
     "typescript": "^3.7.3"
   }
