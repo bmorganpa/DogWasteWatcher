@@ -4,7 +4,7 @@ import { ApolloProvider } from "@apollo/react-hooks";
 import { ApolloClient } from "apollo-client";
 import { InMemoryCache } from "apollo-cache-inmemory";
 
-import { createContext } from "./context";
+import { createContext, cleanupContext } from "./context";
 import { isServer } from "../utils/isServer";
 
 let apolloClient = null;
@@ -40,7 +40,7 @@ export function withApollo(PageComponent, { ssr = true } = {}) {
   }
 
   if (ssr || PageComponent.getInitialProps) {
-    WithApollo.getInitialProps = async ctx => {
+    WithApollo.getInitialProps = async (ctx) => {
       const { AppTree } = ctx;
 
       const apolloContext = isServer() ? await createContext(ctx) : undefined;
@@ -81,6 +81,8 @@ export function withApollo(PageComponent, { ssr = true } = {}) {
             // Handle them in components via the data.error prop:
             // https://www.apollographql.com/docs/react/api/react-apollo.html#graphql-query-data-error
             console.error("Error while running `getDataFromTree`", error);
+          } finally {
+            cleanupContext(apolloContext);
           }
 
           // getDataFromTree does not call componentWillUnmount

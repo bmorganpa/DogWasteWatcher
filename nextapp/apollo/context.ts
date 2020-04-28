@@ -17,11 +17,15 @@ export type AppContext = Readonly<{
 export const createContext = async ({
   req,
 }: IncomingContext): Promise<AppContext> => {
-  const { Pool } = await import("pg");
-  const db = new Pool();
+  const { pool } = await import("./pool");
+  const db = await pool.connect();
 
   const session = await auth0.getSession(req);
   const user = session?.user;
   const claims = user?.["https://dogwastewatcher.now.sh/claims"];
   return { db, user, claims };
+};
+
+export const cleanupContext = (context: AppContext) => {
+  context.db.release();
 };

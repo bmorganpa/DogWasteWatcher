@@ -1,20 +1,44 @@
-name: CI
+name: Full Test Suite
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
-  build:
+  runner-job:
     runs-on: ubuntu-latest
 
-    steps:
-    - uses: actions/checkout@v2
+    services:
+      postgres:
+        image: postgis/postgis:11-2.5
+        env:
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
 
-    - name: Run nextapp tests
-      run: |
-        cd nextapp
-        npm install
-        npm test
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run migrations
+        run: |
+          docker run --rm -e FLYWAY_URL=jdbc:postgresql://localhost:5432/test_db -e FLYWAY_USER=postgres -e FLYWAY_PASSWORD=password --network="host" -v ${PWD}/migrations:/flyway/sql flyway/flyway:6.2.0 migrate
+
+      - name: Run all nextapp tests
+        run: |
+          cd nextapp
+          npm install
+          npm test
+        env:
+          PGUSER: postgres
+          PGHOST: localhost
+          PGPASSWORD: password
+          PGDATABASE: test_db
+          PGPORT: 5432

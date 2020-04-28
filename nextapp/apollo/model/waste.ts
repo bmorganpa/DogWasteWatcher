@@ -30,7 +30,6 @@ export async function getWastes(pg: Client): Promise<ReadonlyArray<Waste>> {
   const result = await pg.query(
     "SELECT id, ST_AsEWKT(location) as location_ewkt from wastes;",
   );
-  pg.end();
   return result.rows.map(parseWasteRow);
 }
 
@@ -46,9 +45,11 @@ export function createWaste(pg: Client, user?: User, claims?: Claims) {
     try {
       const result = await pg.query<createWaste_WasteRow, string[]>(
         "INSERT INTO wastes(location) VALUES(ST_SetSRID(ST_MakePoint($1, $2),4326)) RETURNING id, ST_AsEWKT(location) as location_ewkt",
-        [validatedInput.longitude.toString(), validatedInput.latitude.toString()],
+        [
+          validatedInput.longitude.toString(),
+          validatedInput.latitude.toString(),
+        ],
       );
-      pg.end();
       if (result.rowCount === 0) {
         throw new Error("createWaste failed");
       }
@@ -61,21 +62,23 @@ export function createWaste(pg: Client, user?: User, claims?: Claims) {
   };
 }
 
-export function validateWasteInput(wasteInput: WasteInput): Required<WasteInput> {
-  const properties: {[key: string]: any} = {};
+export function validateWasteInput(
+  wasteInput: WasteInput,
+): Required<WasteInput> {
+  const properties: { [key: string]: any } = {};
   const { longitude, latitude } = wasteInput;
   if (longitude === undefined) {
-    properties.longitude = 'Required';
+    properties.longitude = "Required";
   }
   if (latitude === undefined) {
-    properties.latitude = 'Required';
+    properties.latitude = "Required";
   }
 
   if (Object.values(properties).length > 0) {
     throw new BadRequestError(properties);
   }
 
-  return wasteInput as any
+  return wasteInput as any;
 }
 
 export function parseWasteRow(row: createWaste_WasteRow): Waste {
