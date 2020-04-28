@@ -1,11 +1,17 @@
 import { Geometry, Point } from "wkx";
 import { Client } from "pg";
+import * as R from "ramda";
 
-import { AuthenticationError } from "./error";
-import { AuthorizationError } from "./error";
-import { BadRequestError } from "./error";
-import { Claims } from "./index";
-import { User } from "./index";
+import {
+  Claims,
+  User,
+  validateOrSucceed,
+  validPermissionOrFail,
+  validUserOrFail,
+} from "./index";
+import { getSingleResult } from "./db";
+import { liftP } from "../../utils/fp";
+import { ValidationErrors } from "./error";
 
 export interface Waste {
   id: number;
@@ -26,46 +32,40 @@ export interface CreateWastePayload {
   waste: Waste;
 }
 
-export async function getWastes(pg: Client): Promise<ReadonlyArray<Waste>> {
-  const result = await pg.query(
-    "SELECT id, ST_AsEWKT(location) as location_ewkt from wastes;",
+export function getWastes(db: Client) {
+  return R.pipeP(
+    // @ts-ignore Promise needs to be flattened: See https://github.com/microsoft/TypeScript/issues/27711
+    selectWastes(db),
+    liftP(R.path(['rows'])),
+    liftP(R.map(parseWasteRow))
   );
-  return result.rows.map(parseWasteRow);
 }
 
-export function createWaste(pg: Client, user?: User, claims?: Claims) {
-  return async (waste: WasteInput): Promise<Waste> => {
-    if (!user) {
-      throw new AuthenticationError();
-    }
-    if (!hasPermission("waste:write")(claims)) {
-      throw new AuthorizationError("waste:write");
-    }
-    const validatedInput = validateWasteInput(waste);
-    try {
-      const result = await pg.query<createWaste_WasteRow, string[]>(
-        "INSERT INTO wastes(location) VALUES(ST_SetSRID(ST_MakePoint($1, $2),4326)) RETURNING id, ST_AsEWKT(location) as location_ewkt",
-        [
-          validatedInput.longitude.toString(),
-          validatedInput.latitude.toString(),
-        ],
-      );
-      if (result.rowCount === 0) {
-        throw new Error("createWaste failed");
-      }
-
-      return parseWasteRow(result.rows[0]);
-    } catch (error) {
-      console.error(error);
-      throw new Error("createWaste failed");
-    }
+function selectWastes(db: Client) {
+  return async () => {
+    return await db.query(
+      "SELECT id, ST_AsEWKT(location) as location_ewkt from wastes;",
+    );
   };
 }
 
-export function validateWasteInput(
-  wasteInput: WasteInput,
-): Required<WasteInput> {
-  const properties: { [key: string]: any } = {};
+export function createWaste(db: Client, user?: User, claims?: Claims) {
+  return R.pipeP(
+    // @ts-ignore Promise needs to be flattened: See https://github.com/microsoft/TypeScript/issues/27711
+    (val: WasteInput) => Promise.resolve(val),
+    R.tap<Promise<WasteInput>>(() => validUserOrFail(user)),
+    R.tap<Promise<WasteInput>>(() =>
+      validPermissionOrFail("waste:write", claims),
+    ),
+    liftP(validateOrSucceed(validateWasteInput)),
+    insertWaste(db),
+    liftP(getSingleResult),
+    liftP(parseWasteRow),
+  );
+}
+
+export function validateWasteInput(wasteInput: WasteInput): ValidationErrors {
+  const properties: any = {};
   const { longitude, latitude } = wasteInput;
   if (longitude === undefined) {
     properties.longitude = "Required";
@@ -73,12 +73,16 @@ export function validateWasteInput(
   if (latitude === undefined) {
     properties.latitude = "Required";
   }
+  return properties;
+}
 
-  if (Object.values(properties).length > 0) {
-    throw new BadRequestError(properties);
-  }
-
-  return wasteInput as any;
+function insertWaste(db: Client) {
+  return async (input: Required<WasteInput>) => {
+    return await db.query<createWaste_WasteRow, string[]>(
+      "INSERT INTO wastes(location) VALUES(ST_SetSRID(ST_MakePoint($1, $2),4326)) RETURNING id, ST_AsEWKT(location) as location_ewkt",
+      [input.longitude.toString(), input.latitude.toString()],
+    );
+  };
 }
 
 export function parseWasteRow(row: createWaste_WasteRow): Waste {
@@ -95,9 +99,3 @@ export type createWaste_WasteRow = Readonly<{
   id: number;
   location_ewkt: string;
 }>;
-
-function hasPermission(permission: string) {
-  return (claims?: Claims): boolean => {
-    return claims?.permissions.includes(permission) ?? false;
-  };
-}
