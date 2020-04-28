@@ -40,6 +40,12 @@ describe("createWaste", () => {
         longitude: 21,
       };
       expect(actual).toEqual(expected);
+
+      const created = await client.query("SELECT * from wastes");
+      expect(created.rows).toEqual([{
+        id: '1',
+        location: '0101000020E610000000000000000035400000000000002840'
+      }]);
     });
 
     it("should fail validation when missing longitude", async () => {
