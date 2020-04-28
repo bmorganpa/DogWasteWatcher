@@ -27,7 +27,7 @@ const apolloServer = new ApolloServer({
     if (error.originalError instanceof BadRequestError) {
       return new ApolloUserInputError(
         error.message,
-        error.originalError.properties,
+        error.originalError.errors,
       );
     }
     return error;

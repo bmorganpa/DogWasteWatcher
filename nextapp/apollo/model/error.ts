@@ -14,8 +14,12 @@ export class AuthorizationError extends Error {
   }
 }
 
+export type ValidationErrors = Readonly<{
+  [key: string]: string;
+}>;
+
 export class BadRequestError extends Error {
-  constructor(public properties: Readonly<{ [key: string]: any }>) {
+  constructor(public errors: ValidationErrors) {
     super("Bad request");
 
     Object.setPrototypeOf(this, BadRequestError.prototype);

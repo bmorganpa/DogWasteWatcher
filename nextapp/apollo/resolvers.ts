@@ -9,7 +9,7 @@ export const resolvers = {
       args: unknown,
       { db }: AppContext,
     ): Promise<ReadonlyArray<Waste>> {
-      return getWastes(db);
+      return getWastes(db)();
     },
   },
   Mutation: {
@@ -18,9 +18,8 @@ export const resolvers = {
       { input: { waste } }: { input: CreateWasteInput },
       { db, user, claims }: AppContext,
     ): Promise<CreateWastePayload> => {
-      const output = await createWaste(db, user, claims)(waste);
       return {
-        waste: output,
+        waste: await createWaste(db, user, claims)(waste),
       };
     },
   },
