@@ -1,7 +1,13 @@
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import Head from "next/head";
 import React from "react";
 import { AppProps } from "next/app";
-import Head from "next/head";
+
 import "../i18n";
+import { PageWrapper } from "../components/PageWrapper";
 
 export type UserState = Readonly<{
   loading: boolean;
@@ -14,17 +20,59 @@ const UserContext = React.createContext<UserState>({
 
 export default function MyApp(props: AppProps) {
   const userState = useFetchUser();
+  const { user } = userState;
   const { Component, pageProps } = props;
   return (
-    <UserContext.Provider value={userState}>
-      <Head>
-        <link
-          href="https://api.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.css"
-          rel="stylesheet"
-        />
-      </Head>
-      <Component {...pageProps} />
-    </UserContext.Provider>
+    <div>
+      <UserContext.Provider value={userState}>
+        <Head>
+          <link
+            href="https://api.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.css"
+            rel="stylesheet"
+          />
+        </Head>
+        <PageWrapper>
+          <div className="container">
+            <AppBar position="static">
+              <Toolbar>
+                <div className="toolbar">
+                  <Typography variant="h6">Dog Waste Watcher</Typography>
+                  {user ? (
+                    <Button color="inherit" href="/api/logout">
+                      Logout
+                    </Button>
+                  ) : (
+                    <Button color="inherit" href="/api/login">
+                      Login
+                    </Button>
+                  )}
+                </div>
+              </Toolbar>
+            </AppBar>
+            <div className="page">
+              <Component {...pageProps} />
+            </div>
+          </div>
+        </PageWrapper>
+      </UserContext.Provider>
+      <style jsx>{`
+        .container {
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+        }
+
+        .page {
+          flex-grow: 1;
+        }
+
+        .toolbar {
+          display: flex;
+          justify-content: space-between;
+          width: 100%;
+        }
+      `}</style>
+    </div>
   );
 }
 
