@@ -49,7 +49,7 @@ export const unclusteredPointLayer = {
   },
 };
 
-export const WasteMap = () => {
+export const WasteMap: React.FC = ({ children }) => {
   const [viewport, setViewport] = React.useState<Partial<ViewportProps>>({
     latitude: 40.67,
     longitude: -103.59,
@@ -113,6 +113,7 @@ export const WasteMap = () => {
         <Layer {...clusterCountLayer} />
         <Layer {...unclusteredPointLayer} />
       </Source>
+      {children}
     </MapGL>
   );
 };

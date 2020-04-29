@@ -1,16 +1,14 @@
 import React from "react";
-import gql from "graphql-tag";
+import Fab from "@material-ui/core/Fab";
+import AddIcon from "@material-ui/icons/Add";
 import Link from "next/link";
-import { useQuery } from "@apollo/react-hooks";
 import { useTranslation } from "react-i18next";
-
-import { WastesListQuery } from "../__generated__/types";
-import { WastesListQuery_wastes } from "../__generated__/types";
 
 import { useUser } from "./_app";
 import { withApollo } from "../apollo/client";
 import { WasteMap } from "../components/index/WasteMap";
 import { PageWrapper } from "../components/PageWrapper";
+import { MapPane, MapControl } from "../components/MapPane";
 
 const Index = () => {
   const { t } = useTranslation("index");
@@ -22,24 +20,15 @@ const Index = () => {
   }
 
   return (
-    <PageWrapper>
-      {user ? (
-        <div>{t("title", user)}</div>
-      ) : (
-        <a href="/api/login">{t("common:labels.login")}</a>
-      )}
-      {user && (
-        <div>
-          <a href="/api/logout">{t("common:labels.logout")}</a>
-        </div>
-      )}
-      <div>
-        <Link href="/create_waste">
-          <a>{t("buttons.create.label")}</a>
-        </Link>
-      </div>
-      <WasteMap />
-    </PageWrapper>
+    <WasteMap>
+      <MapPane position="bottomright">
+        <MapControl>
+          <Fab color="primary" aria-label="add" href="/create_waste">
+            <AddIcon />
+          </Fab>
+        </MapControl>
+      </MapPane>
+    </WasteMap>
   );
 };
 
