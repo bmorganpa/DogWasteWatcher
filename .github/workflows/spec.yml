@@ -11,8 +11,18 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Run nextapp unit tests
+    - name: Install deps
       run: |
         cd nextapp
         npm install
+        npm run spec
+
+    - name: Check prettier
+      run: |
+        cd nextapp
+        npm run pretty-check
+
+    - name: Run nextapp unit tests
+      run: |
+        cd nextapp
         npm run spec

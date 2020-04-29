@@ -26,7 +26,7 @@ describe("getSingleResult", () => {
   });
 
   it("should throw an error when more than 1 row", () => {
-      const row = {};
+    const row = {};
     const result = {
       command: "",
       oid: 1,

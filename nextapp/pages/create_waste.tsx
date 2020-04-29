@@ -10,8 +10,7 @@ import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
 
 import { withApollo } from "../apollo/client";
-import { WASTES_QUERY } from "./index";
-import { AddWasteMutation, WastesListQuery } from "../__generated__/types";
+import { AddWasteMutation } from "../__generated__/types";
 import { AddWasteMutationVariables } from "../__generated__/types";
 
 interface UsePositionPayload {
@@ -47,19 +46,6 @@ const Index = () => {
     AddWasteMutation,
     AddWasteMutationVariables
   >(CREATE_WASTE_MUTATION, {
-    update(cache, { data }) {
-      const wastesQuery = cache.readQuery<WastesListQuery>({
-        query: WASTES_QUERY,
-      });
-      if (wastesQuery && data?.createWaste?.waste) {
-        cache.writeQuery({
-          query: WASTES_QUERY,
-          data: {
-            wastes: wastesQuery.wastes.concat([data.createWaste.waste]),
-          },
-        });
-      }
-    },
     onCompleted: () => {
       router.push("/");
     },

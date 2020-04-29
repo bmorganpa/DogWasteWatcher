@@ -37,22 +37,25 @@ describe("getWastes", () => {
     let getWastesWithDB: ReturnType<typeof getWastes>;
 
     beforeEach(async () => {
-      await client.query("INSERT INTO wastes (location) VALUES ('0101000020E610000000000000000035400000000000002840');")
+      await client.query(
+        "INSERT INTO wastes (location) VALUES ('0101000020E610000000000000000035400000000000002840');",
+      );
       getWastesWithDB = getWastes(client);
     });
 
     it("should a result for each waste", async () => {
       const actual = await getWastesWithDB();
-      const expected = [{
-        id: "1",
-        latitude: 12,
-        longitude: 21,
-      }];
+      const expected = [
+        {
+          id: "1",
+          latitude: 12,
+          longitude: 21,
+        },
+      ];
       expect(actual).toEqual(expected);
     });
   });
 });
-
 
 describe("createWaste", () => {
   let client: Client;
