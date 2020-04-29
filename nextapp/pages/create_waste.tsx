@@ -58,8 +58,8 @@ const Index = () => {
       variables: {
         input: {
           waste: {
-            latitude: parseInt(latitude, 10),
-            longitude: parseInt(longitude, 10),
+            latitude: parseFloat(latitude),
+            longitude: parseFloat(longitude),
           },
         },
       },
