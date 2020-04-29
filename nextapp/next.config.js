@@ -5,6 +5,7 @@ module.exports = {
     AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
     AUTH0_CLIENT_SECRET: process.env.AUTH0_CLIENT_SECRET,
     AUTH0_SCOPE: "openid profile",
+    MAPBOX_TOKEN: process.env.MAPBOX_TOKEN,
     REDIRECT_URI:
       process.env.REDIRECT_URI || "http://localhost:8080/api/callback",
     POST_LOGOUT_REDIRECT_URI:
@@ -18,7 +19,7 @@ module.exports = {
     config.externals.pg = "pg";
     return config;
   },
-  exportPathMap: function() {
+  exportPathMap: function () {
     return {
       "/": { page: "/" },
     };

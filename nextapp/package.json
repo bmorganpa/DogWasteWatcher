@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev -p 8080",
     "build": "next build",
-    "pretty": "prettier --write {apollo,lib,pages,utils}/**/*.{js,ts,tsx}",
+    "pretty": "prettier --write **/*.{js,ts,tsx}",
+    "pretty-check": "prettier --check **/*.{js,ts,tsx}",
     "lint": "eslint **/*.ts[x]",
     "start": "next start",
     "export": "next export",
@@ -40,12 +41,14 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-i18next": "^11.4.0",
+    "react-map-gl": "^5.2.5",
     "wkx": "^0.5.0"
   },
   "devDependencies": {
     "@types/jest": "^25.2.1",
     "@types/pg": "^7.14.3",
     "@types/react": "^16.9.34",
+    "@types/react-map-gl": "^5.2.3",
     "@typescript-eslint/eslint-plugin": "^2.30.0",
     "@typescript-eslint/parser": "^2.30.0",
     "apollo": "^2.21.2",

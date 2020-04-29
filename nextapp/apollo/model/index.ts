@@ -1,4 +1,8 @@
-import { AuthenticationError, BadRequestError, AuthorizationError } from "./error";
+import {
+  AuthenticationError,
+  BadRequestError,
+  AuthorizationError,
+} from "./error";
 import { validateOrFail } from "../../utils/fp";
 
 export type User = Readonly<{
@@ -10,14 +14,22 @@ export type Claims = Readonly<{
   roles: ReadonlyArray<string>;
 }>;
 
-export const validUserOrFail = validateOrFail<User | undefined>(Boolean, () => new AuthenticationError())
-export const validPermissionOrFail = validateOrFail(hasPermission, (permission) => new AuthorizationError(permission))
+export const validUserOrFail = validateOrFail<User | undefined>(
+  Boolean,
+  () => new AuthenticationError(),
+);
+export const validPermissionOrFail = validateOrFail(
+  hasPermission,
+  (permission) => new AuthorizationError(permission),
+);
 
 function hasPermission(permission: string, claims?: Claims): boolean {
   return claims?.permissions.includes(permission) ?? false;
 }
 
-export function validateOrSucceed<T, R extends T>(fn: (t1: T) => { [key: string]: any }) {
+export function validateOrSucceed<T, R extends T>(
+  fn: (t1: T) => { [key: string]: any },
+) {
   return (arg: T) => {
     const properties = fn(arg);
 

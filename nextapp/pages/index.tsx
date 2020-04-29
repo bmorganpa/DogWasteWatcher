@@ -6,45 +6,23 @@ import { useTranslation } from "react-i18next";
 
 import { WastesListQuery } from "../__generated__/types";
 import { WastesListQuery_wastes } from "../__generated__/types";
-import { withApollo } from "../apollo/client";
 
 import { useUser } from "./_app";
-
-export const WASTES_QUERY = gql`
-  query WastesListQuery {
-    wastes {
-      id
-      latitude
-      longitude
-    }
-  }
-`;
+import { withApollo } from "../apollo/client";
+import { WasteMap } from "../components/index/WasteMap";
+import { PageWrapper } from "../components/PageWrapper";
 
 const Index = () => {
   const { t } = useTranslation("index");
-  const { data: wastesListData, error, loading } = useQuery<WastesListQuery>(
-    WASTES_QUERY,
-  );
 
   const { loading: userLoading, user } = useUser();
 
-  if (loading || userLoading) {
+  if (userLoading) {
     return <div>Loading...</div>;
   }
 
-  const wastesList = wastesListData?.wastes ? (
-    <ul>
-      {wastesListData?.wastes.map(function mapWasteToComponent(
-        waste: WastesListQuery_wastes,
-      ) {
-        return <li key={waste.id}>{t("labels.waste", waste as any)}</li>;
-      })}
-    </ul>
-  ) : undefined;
-
   return (
-    <div>
-      {error && <div>{error.message}</div>}
+    <PageWrapper>
       {user ? (
         <div>{t("title", user)}</div>
       ) : (
@@ -60,8 +38,8 @@ const Index = () => {
           <a>{t("buttons.create.label")}</a>
         </Link>
       </div>
-      {wastesList}
-    </div>
+      <WasteMap />
+    </PageWrapper>
   );
 };
 

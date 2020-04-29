@@ -1,4 +1,3 @@
-
 import { QueryResult, Query } from "pg";
 
 export function getSingleResult<T>(result: QueryResult<T>): T {

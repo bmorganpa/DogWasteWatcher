@@ -1,7 +1,13 @@
-export function liftP<R>(fn: () => R): () => Promise<R>
-export function liftP<R, T1>(fn: (v1: T1) => R): (v1: Promise<T1>) => Promise<R>
-export function liftP<R, T1, T2>(fn: (v1: T1, v2: T2) => R): (v1: Promise<T1>, v2: Promise<T2>) => Promise<R>
-export function liftP<R, T>(fn: (...args: ReadonlyArray<T>) => R): (...args: ReadonlyArray<Promise<T>>) => Promise<R> {
+export function liftP<R>(fn: () => R): () => Promise<R>;
+export function liftP<R, T1>(
+  fn: (v1: T1) => R,
+): (v1: Promise<T1>) => Promise<R>;
+export function liftP<R, T1, T2>(
+  fn: (v1: T1, v2: T2) => R,
+): (v1: Promise<T1>, v2: Promise<T2>) => Promise<R>;
+export function liftP<R, T>(
+  fn: (...args: ReadonlyArray<T>) => R,
+): (...args: ReadonlyArray<Promise<T>>) => Promise<R> {
   return (...args: ReadonlyArray<Promise<T>>) => {
     return Promise.all(args).then((x) => fn.apply(null, x));
   };

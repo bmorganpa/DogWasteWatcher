@@ -36,8 +36,8 @@ export function getWastes(db: Client) {
   return R.pipeP(
     // @ts-ignore Promise needs to be flattened: See https://github.com/microsoft/TypeScript/issues/27711
     selectWastes(db),
-    liftP(R.path(['rows'])),
-    liftP(R.map(parseWasteRow))
+    liftP(R.path(["rows"])),
+    liftP(R.map(parseWasteRow)),
   );
 }
 

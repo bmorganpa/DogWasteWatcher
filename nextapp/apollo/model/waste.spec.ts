@@ -12,19 +12,19 @@ describe("validateWasteInput", () => {
 
   it("should return an error for missing longitude", () => {
     const wasteInput = wasteFactory({
-      longitude: undefined
+      longitude: undefined,
     });
     const actual = validateWasteInput(wasteInput);
-    const expected = {longitude: "Required"};
+    const expected = { longitude: "Required" };
     expect(actual).toEqual(expected);
   });
 
   it("should return an error for missing latitude", () => {
     const wasteInput = wasteFactory({
-      latitude: undefined
+      latitude: undefined,
     });
     const actual = validateWasteInput(wasteInput);
-    const expected = {latitude: "Required"};
+    const expected = { latitude: "Required" };
     expect(actual).toEqual(expected);
   });
 });

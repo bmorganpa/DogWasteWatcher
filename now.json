@@ -1,7 +1,5 @@
 {
-  "builds": [
-    {"src": "nextapp/package.json", "use": "@now/next"}
-  ],
+  "builds": [{ "src": "nextapp/package.json", "use": "@now/next" }],
   "env": {
     "PGUSER": "@dogwastewatcher-sql-username",
     "PGHOST": "@dogwastewatcher-sql-hostname",
@@ -14,12 +12,11 @@
       "AUTH0_DOMAIN": "dogwastewatcher.auth0.com",
       "AUTH0_CLIENT_ID": "7QsIwNpceIGlyCo3Ukm9nQE9E2nayRJM",
       "AUTH0_CLIENT_SECRET": "@dogwastewatcher-auth0-client-secret",
+      "MAPBOX_TOKEN": "@dogwastewatcher-mapbox-token",
       "REDIRECT_URI": "https://dogwastewatcher.now.sh/api/callback",
       "POST_LOGOUT_REDIRECT_URI": "https://dogwastewatcher.now.sh/",
       "SESSION_COOKIE_SECRET": "@dogwastewatcher-session-cookie-secret"
     }
   },
-  "routes": [
-    { "src": "/(.*)", "dest": "nextapp/$1"}
-  ]
+  "routes": [{ "src": "/(.*)", "dest": "nextapp/$1" }]
 }

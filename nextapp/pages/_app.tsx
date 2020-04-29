@@ -1,5 +1,6 @@
 import React from "react";
 import { AppProps } from "next/app";
+import Head from "next/head";
 import "../i18n";
 
 export type UserState = Readonly<{
@@ -16,6 +17,12 @@ export default function MyApp(props: AppProps) {
   const { Component, pageProps } = props;
   return (
     <UserContext.Provider value={userState}>
+      <Head>
+        <link
+          href="https://api.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.css"
+          rel="stylesheet"
+        />
+      </Head>
       <Component {...pageProps} />
     </UserContext.Provider>
   );
