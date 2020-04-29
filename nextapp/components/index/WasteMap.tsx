@@ -61,29 +61,32 @@ export const WasteMap = () => {
   const sourceRef = React.useRef<any>(null);
   const onClick = React.useCallback(
     (event: PointerEvent) => {
-      const feature = event.features[0];
-      const clusterId = feature.properties.cluster_id;
+      if (event.features.length > 0) {
+        const feature = event.features[0];
+        if ((feature.layer.id = clusterLayer.id)) {
+          const clusterId = feature.properties.cluster_id;
+          const mapboxSource:
+            | GeoJSONSource
+            | undefined = sourceRef.current?.getSource();
 
-      const mapboxSource:
-        | GeoJSONSource
-        | undefined = sourceRef.current?.getSource();
+          mapboxSource?.getClusterExpansionZoom(
+            clusterId,
+            (err: Error, zoom: number) => {
+              if (err) {
+                return;
+              }
 
-      mapboxSource?.getClusterExpansionZoom(
-        clusterId,
-        (err: Error, zoom: number) => {
-          if (err) {
-            return;
-          }
-
-          setViewport({
-            ...viewport,
-            longitude: feature.geometry.coordinates[0],
-            latitude: feature.geometry.coordinates[1],
-            zoom,
-            transitionDuration: 500,
-          });
-        },
-      );
+              setViewport({
+                ...viewport,
+                longitude: feature.geometry.coordinates[0],
+                latitude: feature.geometry.coordinates[1],
+                zoom,
+                transitionDuration: 500,
+              });
+            },
+          );
+        }
+      }
     },
     [sourceRef, setViewport, viewport],
   );
@@ -92,6 +95,7 @@ export const WasteMap = () => {
       {...viewport}
       width="100%"
       height="100%"
+      interactiveLayerIds={[clusterLayer.id]}
       mapStyle="mapbox://styles/mapbox/dark-v9"
       onClick={onClick}
       onViewportChange={setViewport}
