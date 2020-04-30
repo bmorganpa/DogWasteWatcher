@@ -22,15 +22,19 @@ export default function MyApp(props: AppProps) {
   const userState = useFetchUser();
   const { user } = userState;
   const { Component, pageProps } = props;
+
+  // Remove server side styles
+  React.useEffect(() => {
+    const jssStyles = document.querySelector("#jss-server-side");
+    jssStyles?.parentNode?.removeChild(jssStyles);
+  }, []);
+
   return (
     <div>
+      <Head>
+        <title>DogWasteWatcher</title>
+      </Head>
       <UserContext.Provider value={userState}>
-        <Head>
-          <link
-            href="https://api.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.css"
-            rel="stylesheet"
-          />
-        </Head>
         <PageWrapper>
           <div className="container">
             <AppBar position="static">
