@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config({ path: ".env.test" });
 
 import { Client } from "pg";
 
@@ -91,12 +91,14 @@ describe("createWaste", () => {
       expect(actual).toEqual(expected);
 
       const created = await client.query("SELECT * from wastes");
-      expect(created.rows).toEqual([
-        {
-          id: "1",
-          location: "0101000020E610000000000000000035400000000000002840",
-        },
-      ]);
+      expect(created.rows.length).toEqual(1);
+
+      const { created_at, ...row } = created.rows[0];
+      expect(created_at).toBeInstanceOf(Date);
+      expect(row).toEqual({
+        id: "1",
+        location: "0101000020E610000000000000000035400000000000002840",
+      });
     });
 
     it("should throw a BadRequestError when validation fails", async () => {
