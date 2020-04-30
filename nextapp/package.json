@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 8080",
+    "dev": "next dev -p 3001",
     "build": "next build",
     "pretty": "prettier --write **/*.{js,ts,tsx}",
     "pretty-check": "prettier --check **/*.{js,ts,tsx}",
