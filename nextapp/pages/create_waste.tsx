@@ -1,6 +1,7 @@
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Grid from "@material-ui/core/Grid";
+import LocationSearchingIcon from "@material-ui/icons/LocationSearching";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import React, { useState, useCallback } from "react";
@@ -13,9 +14,12 @@ import { withApollo } from "../apollo/client";
 import { AddWasteMutation } from "../__generated__/types";
 import { AddWasteMutationVariables } from "../__generated__/types";
 
+import { GridSpacer, GridWrapper } from "../components/Grid";
+
 interface UsePositionPayload {
   position?: Position;
   error?: PositionError;
+  refresh: () => void;
 }
 
 function usePosition(): UsePositionPayload {
@@ -24,7 +28,10 @@ function usePosition(): UsePositionPayload {
   React.useEffect(() => {
     navigator.geolocation.getCurrentPosition(setPosition, setError);
   }, []);
-  return { position, error };
+  function refresh() {
+    navigator.geolocation.getCurrentPosition(setPosition, setError);
+  }
+  return { position, error, refresh };
 }
 
 const CREATE_WASTE_MUTATION = gql`
@@ -66,7 +73,7 @@ const Index = () => {
     });
   };
 
-  const { position } = usePosition();
+  const { position, refresh: refreshPosition } = usePosition();
   const [latitude, setLatitude] = useState(
     position?.coords.latitude.toString() ?? "0",
   );
@@ -97,7 +104,7 @@ const Index = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Grid container={true}>
+      <GridWrapper spacing={2}>
         {error?.graphQLErrors.map((e) => {
           return (
             <Grid key={e.message} item={true} xs={12}>
@@ -105,27 +112,33 @@ const Index = () => {
             </Grid>
           );
         })}
-        <Grid item={true} xs={12}>
+        <Grid item={true} xs={12} sm={6}>
           <TextField
             required
             id="latitude"
+            fullWidth={true}
             label={t("labels.latitude")}
             onChange={handleLatitudeChange}
             type="number"
             value={latitude}
           />
         </Grid>
-        <Grid item={true} xs={12}>
+        <Grid item={true} xs={12} sm={6}>
           <TextField
             required
             id="longitude"
+            fullWidth={true}
             label={t("labels.longitude")}
             onChange={handleLongitudeChange}
             type="number"
             value={longitude}
           />
         </Grid>
-        <Grid item={true} xs={12}>
+        <Grid container={true} item={true} xs={12} justify="flex-end">
+          <Button color="primary" variant="contained" onClick={refreshPosition}>
+            <LocationSearchingIcon />
+          </Button>
+          <GridSpacer spacing={2} />
           <Button
             color="secondary"
             disabled={loading}
@@ -136,7 +149,7 @@ const Index = () => {
             {loading && <CircularProgress />}
           </Button>
         </Grid>
-      </Grid>
+      </GridWrapper>
     </form>
   );
 };
