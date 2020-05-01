@@ -19,9 +19,4 @@ module.exports = {
     config.externals.pg = "pg";
     return config;
   },
-  exportPathMap: function () {
-    return {
-      "/": { page: "/" },
-    };
-  },
 };
