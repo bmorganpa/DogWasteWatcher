@@ -1,4 +1,6 @@
 # Dog Waste Watcher
+![](https://github.com/bmorganpa/DogWasteWatcher/workflows/Full%20Test%20Suite/badge.svg)
+
 An app to track dog waste that is not picked up
 
 ## Development
