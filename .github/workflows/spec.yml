@@ -22,6 +22,11 @@ jobs:
         cd nextapp
         npm run pretty-check
 
+    - name: Check ESLint
+      run: |
+        cd nextapp
+        npm run lint
+
     - name: Run nextapp unit tests
       run: |
         cd nextapp
