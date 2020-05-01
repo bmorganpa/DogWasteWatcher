@@ -14,9 +14,8 @@ module.exports = {
     SESSION_COOKIE_LIFETIME: 7200, // 2 hours
   },
   webpack(config) {
-    config.externals = config.externals || {};
     // This allows us to import "pg" for SSR, but ignore it on the client
-    config.externals.pg = "pg";
+    config.externals = [...config.externals, "pg"];
     return config;
   },
 };
