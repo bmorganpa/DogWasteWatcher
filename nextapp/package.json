@@ -7,7 +7,7 @@
     "build": "next build",
     "pretty": "prettier --write **/*.{js,ts,tsx}",
     "pretty-check": "prettier --check **/*.{js,ts,tsx}",
-    "lint": "eslint **/*.ts[x]",
+    "lint": "eslint --max-warnings=0 **/*.ts[x]",
     "start": "next start",
     "export": "next export",
     "integration-test-watch": "jest --config jest.integration.config.js --watch",
