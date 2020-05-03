@@ -11,5 +11,7 @@ export const auth0 = initAuth0({
   session: {
     cookieSecret: config.SESSION_COOKIE_SECRET,
     cookieLifetime: config.SESSION_COOKIE_LIFETIME,
+    storeAccessToken: true,
+    storeRefreshToken: true,
   },
 });
