@@ -15,6 +15,7 @@
       "MAPBOX_TOKEN": "@dogwastewatcher-mapbox-token",
       "REDIRECT_URI": "https://dogwastewatcher.now.sh/api/callback",
       "POST_LOGOUT_REDIRECT_URI": "https://dogwastewatcher.now.sh/",
+      "SESSION_COOKIE_LIFETIME": "1209600",
       "SESSION_COOKIE_SECRET": "@dogwastewatcher-session-cookie-secret"
     }
   },
