@@ -32,7 +32,7 @@ const useStyles: any = makeStyles(
             theme.spacing(2),
           marginBottom: ({ position }: MapPaneProps) =>
             (position === "bottomleft" || position === "bottomright") &&
-            theme.spacing(2),
+            theme.spacing(8),
         },
       },
     } as any),
