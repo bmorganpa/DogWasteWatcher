@@ -10,7 +10,6 @@ import {
   validUserOrFail,
 } from "./index";
 import { getSingleResult } from "./db";
-import { liftP } from "../../utils/fp";
 import { ValidationErrors } from "./error";
 
 export interface Waste {
@@ -33,11 +32,10 @@ export interface CreateWastePayload {
 }
 
 export function getWastes(db: Client) {
-  return R.pipeP(
-    // @ts-ignore Promise needs to be flattened: See https://github.com/microsoft/TypeScript/issues/27711
+  return R.pipe(
     selectWastes(db),
-    liftP(R.path(["rows"])),
-    liftP(R.map(parseWasteRow)),
+    R.andThen(R.prop("rows")),
+    R.andThen(R.map(parseWasteRow)),
   );
 }
 
@@ -50,17 +48,13 @@ function selectWastes(db: Client) {
 }
 
 export function createWaste(db: Client, user?: User, claims?: Claims) {
-  return R.pipeP(
-    // @ts-ignore Promise needs to be flattened: See https://github.com/microsoft/TypeScript/issues/27711
-    (val: WasteInput) => Promise.resolve(val),
-    R.tap<Promise<WasteInput>>(() => validUserOrFail(user)),
-    R.tap<Promise<WasteInput>>(() =>
-      validPermissionOrFail("waste:write", claims),
-    ),
-    liftP(validateOrSucceed(validateWasteInput)),
+  return R.pipe(
+    R.tap<WasteInput>(() => validUserOrFail(user)),
+    R.tap<WasteInput>(() => validPermissionOrFail("waste:write", claims)),
+    validateOrSucceed(validateWasteInput),
     insertWaste(db),
-    liftP(getSingleResult),
-    liftP(parseWasteRow),
+    R.andThen(getSingleResult),
+    R.andThen(parseWasteRow),
   );
 }
 

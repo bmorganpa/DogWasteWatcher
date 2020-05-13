@@ -27,7 +27,7 @@ function hasPermission(permission: string, claims?: Claims): boolean {
   return claims?.permissions.includes(permission) ?? false;
 }
 
-export function validateOrSucceed<T, R extends T>(
+export function validateOrSucceed<T, R extends T = Required<T>>(
   fn: (t1: T) => { [key: string]: any },
 ) {
   return (arg: T) => {
