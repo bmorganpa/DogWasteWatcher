@@ -41,7 +41,7 @@
     "ramda": "0.27.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "react-i18next": "11.4.0",
+    "react-i18next": "11.5.0",
     "react-map-gl": "5.2.5",
     "wkx": "0.5.0"
   },
