@@ -1,11 +1,11 @@
-import { IncomingMessage } from "http";
+import { NextApiRequest } from "next";
 
 import { Claims } from "./model/index";
 import { User } from "./model/index";
 import { auth0 } from "../lib/auth0";
 
 type IncomingContext = Readonly<{
-  req: IncomingMessage;
+  req: NextApiRequest;
 }>;
 
 export type AppContext = Readonly<{
