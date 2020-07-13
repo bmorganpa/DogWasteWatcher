@@ -65,7 +65,7 @@
     "eslint-plugin-react-hooks": "4.0.7",
     "jest": "26.1.0",
     "prettier": "2.0.5",
-    "ts-jest": "26.1.1",
+    "ts-jest": "26.1.2",
     "tsfixturefactory": "1.0.0",
     "typescript": "3.9.6"
   }
