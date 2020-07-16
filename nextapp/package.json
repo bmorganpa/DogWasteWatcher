@@ -67,6 +67,6 @@
     "prettier": "2.0.5",
     "ts-jest": "26.1.2",
     "tsfixturefactory": "1.0.0",
-    "typescript": "3.9.6"
+    "typescript": "3.9.7"
   }
 }
