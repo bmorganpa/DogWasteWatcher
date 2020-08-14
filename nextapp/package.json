@@ -46,7 +46,7 @@
     "wkx": "0.5.0"
   },
   "devDependencies": {
-    "@types/jest": "26.0.9",
+    "@types/jest": "26.0.10",
     "@types/pg": "7.14.4",
     "@types/react": "16.9.46",
     "@types/react-map-gl": "5.2.4",
