@@ -47,7 +47,7 @@
   },
   "devDependencies": {
     "@types/jest": "26.0.13",
-    "@types/pg": "7.14.4",
+    "@types/pg": "7.14.5",
     "@types/react": "16.9.49",
     "@types/react-map-gl": "5.2.4",
     "@typescript-eslint/eslint-plugin": "4.1.1",
