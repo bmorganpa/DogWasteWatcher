@@ -3,6 +3,7 @@ import { NextApiRequest } from "next";
 import { Claims } from "./model/index";
 import { User } from "./model/index";
 import { auth0 } from "../lib/auth0";
+import { connectToDatabase } from "./pool";
 
 type IncomingContext = Readonly<{
   req: NextApiRequest;
@@ -17,8 +18,7 @@ export type AppContext = Readonly<{
 export const createContext = async ({
   req,
 }: IncomingContext): Promise<AppContext> => {
-  const { pool } = await import("./pool");
-  const db = await pool.connect();
+  const db = await connectToDatabase();
 
   const session = await auth0.getSession(req);
   const user = session?.user;

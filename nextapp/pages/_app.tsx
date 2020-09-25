@@ -8,6 +8,11 @@ import { AppProps } from "next/app";
 
 import "../i18n";
 import { PageWrapper } from "../components/PageWrapper";
+import { isServer } from "../utils/isServer";
+
+if (!isServer()) {
+  (window as any).pg = {};
+}
 
 export type UserState = Readonly<{
   loading: boolean;
