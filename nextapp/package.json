@@ -26,7 +26,7 @@
     "@material-ui/core": "4.10.0",
     "@material-ui/icons": "4.9.1",
     "@types/ramda": "0.27.6",
-    "@types/react-dom": "16.9.8",
+    "@types/react-dom": "18.2.7",
     "apollo-cache-inmemory": "1.6.6",
     "apollo-client": "2.6.10",
     "apollo-link-http": "1.5.17",
@@ -39,8 +39,8 @@
     "next": "9.4.4",
     "pg": "8.2.1",
     "ramda": "0.27.0",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
     "react-i18next": "11.5.0",
     "react-map-gl": "5.2.5",
     "wkx": "0.5.0"
@@ -48,7 +48,7 @@
   "devDependencies": {
     "@types/jest": "26.0.15",
     "@types/pg": "7.14.7",
-    "@types/react": "17.0.0",
+    "@types/react": "18.2.20",
     "@types/react-map-gl": "5.2.4",
     "@typescript-eslint/eslint-plugin": "4.8.1",
     "@typescript-eslint/parser": "4.8.1",
